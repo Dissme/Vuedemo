@@ -1,17 +1,34 @@
 <template lang="jade">
-  #app #{'这里加侧边栏'}
-    .main
-      router-view
+  #app
+    Topbar
+    .content
+      Sidebar
+      .main
+        router-view
 </template>
 
 <script>
 import store from './store'
+import Topbar from 'components/Topbar'
+import Sidebar from 'components/Sidebar'
+
 export default {
-  store
+  store,
+  components: {
+    Topbar, Sidebar
+  }
 }
 </script>
 
 <style lang="less">
+  html,body,#app{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    overflow-y: auto;
+  }
   body{
     font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
     font-size: 16px;
@@ -42,8 +59,26 @@ export default {
       appearance: none;
       text-decoration: none;
     }
+    button{
+      cursor: pointer;
+    }
+    ul,li{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
   }
-  .main {
-    overflow: hidden;
+  .content{
+    display: flex;
+    padding-top: 70px;
+    height: 100%;
+    overflow-y: auto;
+    .side_bar{
+      flex: 0 0 auto;
+    }
+    .main {
+      flex: 1 1 auto;
+      overflow: hidden;
+    }
   }
 </style>

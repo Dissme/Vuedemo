@@ -7,28 +7,22 @@
             br
             |并且为您实时保存案例。
         button.sign(v-on:click='signIn') {{sign_in ? '注册' : '登陆'}}
-      .login_form(v-if='sign_in', class='sign_in')
-        .type LOGIN
-        .form
+      .login_form
+        .type {{sign_in ? 'LOGIN' : 'JOIN'}}
+        .form(v-if='sign_in')
           label 用户名/邮箱
           input(name='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
           input(name='user_pwd', v-model='user_pwd', class='last')
           .forget
-            a(v-link='login') 忘记密码
-        .buttons
-          button(v-on:click='login') 登陆
-          span 或者
-          .icon
-      .login_form(v-else)
-        .type JOIN
-        .form
+            a(v-link='{name: "login"}') 忘记密码
+        .form(v-else)
           label 用户名
           input(name='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
           input(name='user_email', v-model='user_email')
           input(name='user_pwd', v-model='user_pwd')
           input(name='user_idf', v-model='user_idf')
         .buttons
-          button(v-on:click='login') 注册
+          button(v-on:click='login') {{sign_in ? '登陆' : '注册'}}
           span 或者
           .icon
 </template>
@@ -45,15 +39,19 @@
     right: 0;
     margin: auto;
     &.sign_in{
-      padding-right: 540px;
+      padding-left: 540px;
       .login_form{
-        right: 30px;
+        height: 442px;
+        left: 30px;
+        animation: right-left .3s ease .2s;
       }
     }
     &.sign_up{
-      padding-left: 540px;
+      padding-right: 540px;
       .login_form{
-        left: 30px;
+        height: 476px;
+        left: 380px;
+        animation: left-right .3s ease .2s;
       }
     }
     .login_detail{
@@ -86,7 +84,6 @@
       position: absolute;
       padding: 40px;
       width: 510px;
-      min-height: 442px;
       overflow: hidden;
       background: #eee;
       display: flex;
@@ -94,6 +91,7 @@
       top: 0;
       bottom: 0;
       margin: auto;
+      transition: all .3s;
       label{
         font-size: 14px;
         line-height: 1;
@@ -157,6 +155,29 @@
           font-size: 16px;
         }
       }
+    }
+  }
+
+  @keyframes left-right {
+    0%, 100% {
+      transform: translate3d(0, 0, 0);
+    }
+    35%{
+      transform: translate3d(30px, 0, 0);
+    }
+    70% {
+      transform: translate3d(-10px, 0, 0);
+    }
+  }
+  @keyframes right-left {
+    0%, 100% {
+      transform: translate3d(0, 0, 0);
+    }
+    35%{
+      transform: translate3d(-30px, 0, 0);
+    }
+    70% {
+      transform: translate3d(10px, 0, 0);
     }
   }
 
