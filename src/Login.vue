@@ -1,5 +1,7 @@
 <template lang="jade">
-    div(v-bind:class='["login", sign_in ? "sign_in" : "sign_up"]')
+    Topbar
+      button(v-on:click='modal') 登陆
+    div(v-bind:class='["login", sign_in ? "sign_in" : "sign_up"]', v-show='show_modal', transition="modal", transition-mode="out-in")
       .login_detail
         .l1 {{sign_in ? '没有账户?' : '已有账户?'}}
         .l2
@@ -8,27 +10,64 @@
             |并且为您实时保存案例。
         button.sign(v-on:click='signIn') {{sign_in ? '注册' : '登陆'}}
       .login_form
-        .type {{sign_in ? 'LOGIN' : 'JOIN'}}
-        .form(v-if='sign_in')
-          label 用户名/邮箱
-          input(name='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
-          input(name='user_pwd', v-model='user_pwd', class='last')
-          .forget
-            a(v-link='{name: "login"}') 忘记密码
-        .form(v-else)
-          label 用户名
-          input(name='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
-          input(name='user_email', v-model='user_email')
-          input(name='user_pwd', v-model='user_pwd')
-          input(name='user_idf', v-model='user_idf')
+        .type {{form_temp}}
+        .form
+          template(v-if='form_temp=="LOGIN"')
+            .input(v-on:click='input("user_name",$event)')
+              label 用户名/邮箱
+              input(v-on:blur='blur', v-el='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
+            .input(v-on:click='input("user_pwd",$event)')
+              label 密码
+              input(v-on:blur='blur', v-el='user_pwd', v-model='user_pwd')
+            .forget
+              span(v-on:click='forget') 忘记密码
+          template(v-if='form_temp=="JOIN"')
+            .input(v-on:click='input("user_name",$event)')
+              label 用户名
+              input(v-on:blur='blur', v-el='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
+            .input(v-on:click='input("user_email",$event)')
+              label 邮箱
+              input(v-on:blur='blur', v-el='user_email', v-model='user_email')
+            .input(v-on:click='input("user_pwd",$event)')
+              label 密码
+              input(v-on:blur='blur', v-el='user_pwd', v-model='user_pwd')
+            .input(v-on:click='input("user_idf",$event)')
+              label 验证码
+              input(v-on:blur='blur', v-el='user_idf', v-model='user_idf')
+          template(v-if='form_temp=="FORGET PASSWORD"')
+            .des 我们将发送一封重置密码的链接到您的邮箱
+            .input(v-on:click='input("user_email",$event)')
+              label 邮箱
+              input(v-on:blur='blur', v-el='user_email', v-model='user_email')
         .buttons
-          button(v-on:click='login') {{sign_in ? '登陆' : '注册'}}
-          span 或者
-          .icon
+          template(v-if='form_temp == "FORGET PASSWORD"')
+            button(v-on:click='reset') 重置密码
+            span.back(v-on:click='back') 想起来了
+          template(v-else)
+            button(v-on:click='login') {{sign_in ? '登陆' : '注册'}}
+            span 或者
+            .icon
 </template>
 <style lang="less" scoped>
   @focus-color: #36b962;
   @bg-color: #313131;
+  .top_bar{
+    background: transparent;
+    width: 1000px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    box-shadow: none;
+    button{
+      font-size: 16px;
+      color: #fff;
+      width: 97px;
+      height: 44px;
+      margin: auto;
+      box-shadow: 0 4px 20px 0 rgba(79, 79, 79, 0.5);
+      background: #3c6;
+    }
+  }
   .login{
     width: 920px;
     height: 400px;
@@ -92,22 +131,6 @@
       bottom: 0;
       margin: auto;
       transition: all .3s;
-      label{
-        font-size: 14px;
-        line-height: 1;
-        height: 14px;
-        color: @bg-color;
-        &.focus{
-          color: @focus-color;
-        }
-      }
-      input{
-        border-bottom: 1px solid @bg-color;
-        width: 100%;
-        &:focus{
-          border-bottom: 1px solid @focus-color;
-        }
-      }
       .type{
         font-size: 34px;
         color: @focus-color;
@@ -117,19 +140,53 @@
       }
       .form{
         flex: 1 1 auto;
-        padding-top: 40px;
-        input{
-          margin-bottom: 32px;
-          &.last{
-            margin-bottom: 0;
+        .des{
+          margin-top: 21px;
+          line-height: 14px;
+          height: 14px;
+          color: #2d2d2d;
+        }
+        .input{
+          border-bottom: 1px solid @bg-color;
+          width: 100%;
+          transition: all .3s ease;
+          position: relative;
+          padding-top: 32px;
+          overflow: hidden;
+          >label{
+            position: absolute;
+            left: 0;
+            bottom: 1px;
+            line-height: 32px;
+            font-size: 16px;
+            height: 32px;
+            width: 100%;
+            background: #eee;
+            transition: all .3s ease;
+          }
+          >input{
+            width: 100%;
+          }
+          &.hasVal>label{
+            font-size: 14px;
+            bottom: 37px;
+            line-height: 14px;
+            height: 14px;
+          }
+          &.focus{
+            border-bottom: 1px solid @focus-color;
+            >label{
+              color: @focus-color;
+            }
           }
         }
         .forget{
           text-align: right;
           padding-top: 13px;
-          a{
+          span{
             color: #737373;
             font-size: 14px;
+            cursor: pointer;
           }
         }
       }
@@ -153,6 +210,11 @@
         span{
           color: #747474;
           font-size: 16px;
+        }
+        .back{
+          font-size: 14px;
+          color: #36b962;
+          cursor: pointer;
         }
       }
     }
@@ -184,7 +246,7 @@
 </style>
 <script>
 import actions from 'actions/login'
-
+import Topbar from 'components/Topbar'
 export default{
   data () {
     return {
@@ -192,8 +254,14 @@ export default{
       user_pwd: '',
       user_email: '',
       user_idf: '',
-      sign_in: true
+      sign_in: true,
+      form_temp: 'LOGIN',
+      input_name: '',
+      show_modal: false
     }
+  },
+  components: {
+    Topbar
   },
   vuex: {
     actions,
@@ -202,6 +270,12 @@ export default{
         return state.login.logined
       }
     }
+  },
+  created () {
+    this.hideBars()
+  },
+  destroyed () {
+    this.showBars()
   },
   methods: {
     checkAuth () {
@@ -216,7 +290,27 @@ export default{
       }
     },
     signIn () {
+      this.form_temp = this.sign_in ? 'JOIN' : 'LOGIN'
       this.sign_in = !this.sign_in
+    },
+    forget () {
+      this.form_temp = 'FORGET PASSWORD'
+    },
+    back () {
+      this.form_temp = 'LOGIN'
+    },
+    input (name, {currentTarget}) {
+      this.input_name = name
+      currentTarget.className = 'input hasVal focus'
+      currentTarget.getElementsByTagName('input')[0].focus()
+    },
+    blur ({currentTarget}) {
+      let cls = 'input'
+      if (currentTarget.value.length) cls += ' hasVal'
+      currentTarget.parentNode.className = cls
+    },
+    modal () {
+      this.show_modal = true
     }
   }
 }

@@ -1,14 +1,14 @@
 /**
  * Created by emerge_2 on 16/9/18.
  */
-import login from './Login'
+import Login from './Login'
 import Hello from './components/Hello'
 // todo: import failed from '' 404
 
 export default (router) => router.map({
   '/': {
     name: 'login',
-    component: login,
+    component: Login,
     auth: true
   },
   '/hello': {

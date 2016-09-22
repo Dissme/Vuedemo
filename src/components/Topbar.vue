@@ -2,9 +2,10 @@
   .top_bar
     div(v-bind:class = '[".logo", full ? "full" : ""]')
     .buttons
-      button 保存
-      button 预览
-      button.publish 发布
+      slot
+        button 保存
+        button 预览
+        button.publish 发布
 </template>
 <style lang="less" scoped>
   .top_bar{

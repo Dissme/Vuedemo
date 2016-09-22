@@ -1,8 +1,8 @@
 <template lang="jade">
   #app
-    Topbar
+    Topbar(v-show='bars_show')
     .content
-      Sidebar
+      Sidebar(v-show='bars_show')
       .main
         router-view
 </template>
@@ -16,6 +16,16 @@ export default {
   store,
   components: {
     Topbar, Sidebar
+  },
+  vuex: {
+    getters: {
+      bars_show (_) {
+        return _.bars.bars_show
+      }
+    }
+  },
+  created () {
+    console.log(this.$route)
   }
 }
 </script>
@@ -80,5 +90,11 @@ export default {
       flex: 1 1 auto;
       overflow: hidden;
     }
+  }
+  .modal-transition {
+    transition: all .3s ease;
+  }
+  .modal-enter, .modal-leave {
+    transform: scale(.3);
   }
 </style>
