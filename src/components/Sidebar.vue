@@ -27,7 +27,7 @@
 </template>
 <style lang="less" scoped>
   .side_bar{
-    width: 33px;
+    width: 70px;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -52,6 +52,7 @@
         box-sizing: border-box;
         height: 60px;
         color: #2f2f2f;
+        white-space: nowrap;
       }
       .list_1.on{
         background: #2f2f2f;
@@ -80,6 +81,7 @@
         line-height: 60px;
         box-sizing: border-box;
         padding-left: 66px;
+        white-space: nowrap;
       }
     }
     .emerge{

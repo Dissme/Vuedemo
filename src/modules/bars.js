@@ -5,11 +5,16 @@ import {types} from 'actions/bars'
 import {types as types2} from 'actions/login'
 const state = {
   full_show: true,
-  bars_show: true
+  bars_show: true,
+  fetching: 0
 }
 const mutations = {
   [types.TOGGLE_FULL_BAR] (_) {
     _.full_show = !_.full_show
+  },
+  [types.GLOBAL_FETCHING] (_, add) {
+    let result = _.fetching + add ? 1 : -1
+    _.fetching = result < 0 ? 0 : result
   },
   [types2.HIDE_BARS] (_) {
     _.bars_show = false

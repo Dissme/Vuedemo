@@ -54,8 +54,6 @@
   .top_bar{
     background: transparent;
     width: 1000px;
-    left: 0;
-    right: 0;
     margin: 0 auto;
     box-shadow: none;
     button{
@@ -279,7 +277,7 @@ export default{
   },
   methods: {
     checkAuth () {
-      const red = this.$route.query.redirect
+      let red = this.$route.query.redirect
       this.$route.router.go(red)
     },
     login () {

@@ -9,15 +9,13 @@
 </template>
 <style lang="less" scoped>
   .top_bar{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+    flex: 0 0 auto;
     height: 70px;
     overflow: hidden;
     background: #333;
     box-shadow: 0 4px 20px 0 rgba(79, 79, 79, 0.5);
     z-index: 1000;
+    position: relative;
     .logo{
       width: 33px;
       height: 37px;

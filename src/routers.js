@@ -2,7 +2,8 @@
  * Created by emerge_2 on 16/9/18.
  */
 import Login from './Login'
-import Hello from './components/Hello'
+import Erji from './erji'
+import Sanji from './sanji'
 // todo: import failed from '' 404
 
 export default (router) => router.map({
@@ -11,10 +12,13 @@ export default (router) => router.map({
     component: Login,
     auth: true
   },
-  '/hello': {
-    name: 'hello',
-    component: Hello,
-    auth: true
+  '/erji': {
+    name: 'erji',
+    component: Erji
+  },
+  '/sanji/:type': {
+    name: 'sanji',
+    component: Sanji
   }
   // '*': {
   //   component: failed,
