@@ -28,15 +28,15 @@ export default{
       comps: [{
         title: '自定义模板',
         src: 'http://scimg.jb51.net/allimg/160815/103-160Q509544OC.jpg',
-        idx: '123'
+        idx: 'typeA'
       }, {
         title: '案例模板B',
         src: 'http://scimg.jb51.net/allimg/160815/103-160Q509544OC.jpg',
-        idx: '456'
+        idx: 'typeB'
       }, {
         title: '案例模板A',
         src: 'http://scimg.jb51.net/allimg/160815/103-160Q509544OC.jpg',
-        idx: '789'
+        idx: 'typeC'
       }]
     }
   },

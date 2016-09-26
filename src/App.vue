@@ -81,6 +81,18 @@ export default {
       padding: 0;
       list-style: none;
     }
+    .h1,.h2{
+      margin: 0;
+      font-weight: normal;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .h1{
+      font-size: 23px;
+    }
+    .h2{
+      font-size: 18px;
+    }
   }
   #app{
     display: flex;
@@ -129,6 +141,6 @@ export default {
     transition: all .3s ease;
   }
   .modal-enter, .modal-leave {
-    transform: scale(.3);
+    transform: scale(.5);
   }
 </style>
