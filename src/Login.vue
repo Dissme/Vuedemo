@@ -15,30 +15,31 @@
           template(v-if='form_temp=="LOGIN"')
             .input(v-on:click='input("user_name",$event)')
               label 用户名/邮箱
-              input(v-on:blur='blur', v-el='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
+              input(v-on:blur='blur', name='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
             .input(v-on:click='input("user_pwd",$event)')
               label 密码
-              input(v-on:blur='blur', v-el='user_pwd', v-model='user_pwd')
+              input(v-on:blur='blur', name='user_pwd', v-model='user_pwd', type='password')
             .forget
               span(v-on:click='forget') 忘记密码
           template(v-if='form_temp=="JOIN"')
             .input(v-on:click='input("user_name",$event)')
               label 用户名
-              input(v-on:blur='blur', v-el='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
+              input(v-on:blur='blur', name='user_name', v-model='user_name', placeholder='请输入4-16位中英文数字字母')
             .input(v-on:click='input("user_email",$event)')
               label 邮箱
-              input(v-on:blur='blur', v-el='user_email', v-model='user_email')
+              input(v-on:blur='blur', name='user_email', v-model='user_email')
             .input(v-on:click='input("user_pwd",$event)')
               label 密码
-              input(v-on:blur='blur', v-el='user_pwd', v-model='user_pwd')
+              input(v-on:blur='blur', name='user_pwd', v-model='user_pwd')
             .input(v-on:click='input("user_idf",$event)')
               label 验证码
-              input(v-on:blur='blur', v-el='user_idf', v-model='user_idf')
+              input(v-on:blur='blur', name='user_idf', v-model='user_idf')
+              button(v-on:click='changeCode', :value='code', class='code') {{code}}
           template(v-if='form_temp=="FORGET PASSWORD"')
             .des 我们将发送一封重置密码的链接到您的邮箱
             .input(v-on:click='input("user_email",$event)')
               label 邮箱
-              input(v-on:blur='blur', v-el='user_email', v-model='user_email')
+              input(v-on:blur='blur', name='user_email', v-model='user_email')
         .buttons
           template(v-if='form_temp == "FORGET PASSWORD"')
             button(v-on:click='reset') 重置密码
@@ -162,6 +163,16 @@
             background: #eee;
             transition: all .3s ease;
           }
+          >.code{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 35px;
+            height: 32px;
+            line-height: 32px;
+            color: #333;
+            opacity: .7;
+          }
           >input{
             width: 100%;
           }
@@ -175,6 +186,12 @@
             border-bottom: 1px solid @focus-color;
             >label{
               color: @focus-color;
+            }
+          }
+          &.err{
+            border-color: #ff3f66;
+            &>label{
+              color: #ff3f66;
             }
           }
         }
@@ -245,6 +262,39 @@
 <script>
 import actions from 'actions/login'
 import Topbar from 'components/Topbar'
+
+const validator = {
+  trim (str) {
+    if (typeof str !== 'string') return ''
+    return str.replace(/(^\s*)|(\s*$)/g, '')
+  },
+  createCode () {
+    let code = ''
+    let codeLength = 4
+    let random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    for (let i = 0; i < codeLength; i++) {
+      let index = Math.floor(Math.random() * 36)
+      code += random[index]
+    }
+    return code
+  },
+  user_name (str) {
+    if (typeof str !== 'string') return ''
+    return (/^[\u4e00-\u9fa5_a-zA-Z0-9]{4,20}$/).test(str)
+  },
+  user_email (str) {
+    if (typeof str !== 'string') return ''
+    return (/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/).test(str)
+  },
+  user_pwd (str) {
+    if (typeof str !== 'string') return ''
+    return (/^[@A-Za-z0-9!#\$%\^&\*\.~]{6,22}$/).test(str)
+  },
+  user_idf (str, code) {
+    return str.trim().toUpperCase() === code.trim()
+  }
+}
+
 export default{
   data () {
     return {
@@ -255,7 +305,8 @@ export default{
       sign_in: true,
       form_temp: 'LOGIN',
       input_name: '',
-      show_modal: false
+      show_modal: false,
+      code: validator.createCode()
     }
   },
   components: {
@@ -276,6 +327,9 @@ export default{
     this.showBars()
   },
   methods: {
+    changeCode () {
+      this.code = validator.createCode()
+    },
     checkAuth () {
       let red = this.$route.query.redirect
       this.$route.router.go(red)
@@ -284,7 +338,7 @@ export default{
       if (this.sign_in) {
         this.userLogin(this.user_name, this.user_pwd)
       } else {
-        this.userSignup(this.user_name, this.user_email, this.user_pwd, this.user_idf)
+        this.userSignUp(this.user_name, this.user_email, this.user_pwd)
       }
     },
     signIn () {
@@ -304,7 +358,10 @@ export default{
     },
     blur ({currentTarget}) {
       let cls = 'input'
-      if (currentTarget.value.length) cls += ' hasVal'
+      let val = currentTarget.value
+      let name = currentTarget.name
+      if (!validator[name](val, this.code)) cls += ' err'
+      if (val.length) cls += ' hasVal'
       currentTarget.parentNode.className = cls
     },
     modal () {

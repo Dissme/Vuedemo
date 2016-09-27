@@ -11,6 +11,10 @@ module.exports = {
     'html'
   ],
   // add your custom rules here
+  'globals': {
+    'fetch': true
+  },
+  // 'wrap-regex': 2,
   'rules': {
     // allow paren-less arrow functions
     'arrow-parens': 0,

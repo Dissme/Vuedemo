@@ -13,7 +13,7 @@ const mutations = {
     _.full_show = !_.full_show
   },
   [types.GLOBAL_FETCHING] (_, add) {
-    let result = _.fetching + add ? 1 : -1
+    let result = _.fetching + add
     _.fetching = result < 0 ? 0 : result
   },
   [types2.HIDE_BARS] (_) {

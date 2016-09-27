@@ -6,6 +6,10 @@ import Erji from './erji'
 import Sanji from './sanji'
 // todo: import failed from '' 404
 
+const failed = {
+  template: '<div style="position: absolute;top: 0;left: 0;right: 0;bottom: 0;margin: auto;text-align: center;height: 23px;line-height:23px;font-size: 23px">页面走失</div>'
+}
+
 export default (router) => router.map({
   '/': {
     name: 'login',
@@ -19,8 +23,8 @@ export default (router) => router.map({
   '/sanji/:type': {
     name: 'sanji',
     component: Sanji
+  },
+  '*': {
+    component: failed
   }
-  // '*': {
-  //   component: failed,
-  // }
 })

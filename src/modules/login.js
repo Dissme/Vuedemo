@@ -14,6 +14,9 @@ const mutations = {
   [types.USER_LOGOUT] (state, ...args) {
     console.log('this is modules', state, ...args)
     state.logined = false
+  },
+  [types.USER_SIGN_UP] (_, ...args) {
+    console.log(args)
   }
 }
 export default {
