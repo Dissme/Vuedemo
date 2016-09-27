@@ -62,6 +62,54 @@
       overflow-y: auto;
       input{
         width: 100%;
+        color: #fff;
+      }
+    }
+    .search{
+      width: 340px;
+      height: 45px;
+      margin: 0 auto;
+      position: absolute;
+      top: 500px;
+      left: 0;
+      right: 0;
+      border: 1px solid #f2f2f2;
+      padding-right: 45px;
+      &:before{
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #f2f2f2;
+        width: 45px;
+        height: 100%;
+        content: '';
+      }
+    }
+    .menu{
+      height: 65px;
+      width: 340px;
+      margin: 0 auto;
+      position: absolute;
+      top: 570px;
+      left: 0;
+      right: 0;
+      border: 1px solid #f2f2f2;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      &:hover:before{
+        position: absolute;
+        background: #333;
+        color: #f2f2f2;
+        opacity: .7;
+        content: '点击选择其它菜单';
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 18px;
+        text-align: center;
+        line-height: 65px;
       }
     }
   }
