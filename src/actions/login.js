@@ -1,5 +1,4 @@
 import fetch from 'src/utils'
-console.log(fetch)
 
 export const types = {
   USER_LOGIN: 'USER_LOGIN',
@@ -10,9 +9,17 @@ export const types = {
 }
 
 export default {
-  userLogin ({dispatch}, name, pwd) {
-    console.log(fetch)
-    dispatch(types.USER_LOGIN, name, pwd)
+  userLogin ({dispatch}, account, password, red) {
+    fetch({
+      method: 'post',
+      url: 'login',
+      data: {
+        account, password
+      }
+    }, dispatch, types.USER_LOGIN).then(() => {
+      if (red) red()
+      else this.$route.router.go({name: 'erji'})
+    })
   },
   userLogout ({dispatch}) {
     dispatch(types.USER_LOGOUT)
@@ -24,12 +31,20 @@ export default {
       data: {
         username, password, email
       }
-    }, dispatch, types.USER_SIGN_UP)
+    }, dispatch, types.USER_SIGN_UP).then(() => {
+      this.userLogin({dispatch}, username, password)
+    })
   },
   hideBars ({dispatch}) {
     dispatch(types.HIDE_BARS)
   },
   showBars ({dispatch}) {
     dispatch(types.SHOW_BARS)
+  },
+  test2 ({dispatch}) {
+    fetch({
+      method: 'get',
+      url: 'test2'
+    }, dispatch, 'null').then((res) => console.log(res))
   }
 }

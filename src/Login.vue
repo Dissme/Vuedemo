@@ -9,6 +9,7 @@
             br
             |并且为您实时保存案例。
         button.sign(v-on:click='signIn') {{sign_in ? '注册' : '登陆'}}
+        button(v-on:click='test') test
       .login_form
         .type {{form_temp}}
         .form
@@ -34,7 +35,7 @@
             .input(v-on:click='input("user_idf",$event)')
               label 验证码
               input(v-on:blur='blur', name='user_idf', v-model='user_idf')
-              button(v-on:click='changeCode', :value='code', class='code') {{code}}
+              img(v-on:click='changeCode', :src='code.dataURL', class='code', :data-code='code.code')
           template(v-if='form_temp=="FORGET PASSWORD"')
             .des 我们将发送一封重置密码的链接到您的邮箱
             .input(v-on:click='input("user_email",$event)')
@@ -167,10 +168,8 @@
             position: absolute;
             right: 0;
             bottom: 0;
-            width: 35px;
+            width: 50px;
             height: 32px;
-            line-height: 32px;
-            color: #333;
             opacity: .7;
           }
           >input{
@@ -262,6 +261,7 @@
 <script>
 import actions from 'actions/login'
 import Topbar from 'components/Topbar'
+// import Code from 'verify-code' 神奇的canvas编译失败
 
 const validator = {
   trim (str) {
@@ -269,13 +269,7 @@ const validator = {
     return str.replace(/(^\s*)|(\s*$)/g, '')
   },
   createCode () {
-    let code = ''
-    let codeLength = 4
-    let random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    for (let i = 0; i < codeLength; i++) {
-      let index = Math.floor(Math.random() * 36)
-      code += random[index]
-    }
+    let code = {code: '1234', dataURL: ''}
     return code
   },
   user_name (str) {
@@ -322,23 +316,29 @@ export default{
   },
   created () {
     this.hideBars()
+    this.checkAuth()
   },
   destroyed () {
     this.showBars()
   },
   methods: {
+    test () {
+      this.test2()
+    },
     changeCode () {
       this.code = validator.createCode()
     },
     checkAuth () {
-      let red = this.$route.query.redirect
-      this.$route.router.go(red)
+      let red = this.$route.query.redirect || '/erji'
+      if (this.logined) {
+        this.$route.router.go(decodeURIComponent(red))
+      }
     },
     login () {
       if (this.sign_in) {
-        this.userLogin(this.user_name, this.user_pwd)
+        this.userLogin(this.user_name, this.user_pwd, this.checkAuth)
       } else {
-        this.userSignUp(this.user_name, this.user_email, this.user_pwd)
+        this.userSignUp(this.user_name, this.user_pwd, this.user_email)
       }
     },
     signIn () {
@@ -360,7 +360,7 @@ export default{
       let cls = 'input'
       let val = currentTarget.value
       let name = currentTarget.name
-      if (!validator[name](val, this.code)) cls += ' err'
+      if (!validator[name](val, this.code.code)) cls += ' err'
       if (val.length) cls += ' hasVal'
       currentTarget.parentNode.className = cls
     },

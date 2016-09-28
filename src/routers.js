@@ -13,16 +13,17 @@ const failed = {
 export default (router) => router.map({
   '/': {
     name: 'login',
-    component: Login,
-    auth: true
+    component: Login
   },
   '/erji': {
     name: 'erji',
-    component: Erji
+    component: Erji,
+    auth: true
   },
   '/sanji/:type': {
     name: 'sanji',
-    component: Sanji
+    component: Sanji,
+    auth: true
   },
   '*': {
     component: failed

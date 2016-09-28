@@ -21,14 +21,14 @@ function parseJSON (response) {
 const session = window.localStorage || window.sessionStorage
 
 export function getToken () {
-  Fetch('').then(v => session.setItem('Token', v))
+  Fetch('').then(v => session.setItem('token', v))
 }
 
 export default function ({method, url, data}, dispatch, successAction) {
   if (!/^http/.test(url)) {
-    url = 'http://66d974a6.ngrok.io/api/'.concat(url)
+    url = 'http://e6e73eb2.ngrok.io/api/'.concat(url)
   }
-  if (method === 'get') {
+  if (method === 'get' && data) {
     Object.keys(data).forEach((name, idx) => {
       url += idx === 0 ? '?' : '&'
       url += `${name}=${data[name]}`
@@ -37,13 +37,14 @@ export default function ({method, url, data}, dispatch, successAction) {
   let headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Token': session.getItem('Token')// todo: 回头商量下请求机制
+    'Authorization': 'Bearer ' + session.getItem('token')// todo: 回头商量下请求机制
   }
   dispatch(types.GLOBAL_FETCHING, 1)
   return Fetch(url, {method, headers, body: JSON.stringify(data)}).then(checkStatus).then(parseJSON).then(res => {
     dispatch(types.GLOBAL_FETCHING, -1)
     if (res.success) {
-      dispatch(successAction, res)
+      dispatch(successAction, res.data)
+      return res.data
     } else {
       console.error(res.msg)
     }
