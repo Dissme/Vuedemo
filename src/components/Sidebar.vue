@@ -8,11 +8,11 @@
             template(v-if='ia == list1.idx')
               .list_2
                 template(v-for='(ib,lb) in list2[ia].sibs')
-                  button(:class="ib == list2[ia].idx ? 'on' : ''", v-on:click='handleC2(ia,ib)') {{lb}}
+                  button(:class="ib == list2[ia].idx ? 'on' : ''", v-on:click='handleC2(ib)') {{lb}}
                   template(v-if='ib == list2[ia].idx')
                     .list_3
                       template(v-for='(ic,lc) in list3[ia][ib].sibs')
-                        a(:class="ic == list3[ia][ib].idx ? 'on' : ''", v-on:click='handleC3(ia,ib,ic)', v-link='"/sanji/"+lc') {{lc}}
+                        a(:class="ic == list3[ia][ib].idx ? 'on' : ''", v-on:click='handleC3(ic)', v-link='"/sanji/"+lc') {{lc}}
       .white
       nav.bottom
         a(v-link='') 个人中心
@@ -90,45 +90,39 @@
 </style>
 <script>
 import actions from 'actions/bars'
+import actions2 from 'actions/erji'
 
 export default{
-  data () {
-    return {
-      list1: {idx: null, sibs: ['会议', '联合办公', '购物中心', '我的案例']},
-      list2: [
-        {idx: null, sibs: ['type1', 'type2', '自定义模板']},
-        {idx: null, sibs: null},
-        {idx: null, sibs: null},
-        {idx: null, sibs: null}
-      ],
-      list3: [
-        [
-          {idx: null, sibs: null},
-          {idx: null, sibs: null},
-          {idx: null, sibs: ['typeA', 'typeB', 'typeC']}
-        ], [], [], []
-      ]
-    }
-  },
   methods: {
     toggle () {
       this.toggleFullBar()
     },
     handleC1 (idx) {
-      this.list1.idx = idx
+      this.handleList1(idx)
     },
-    handleC2 (ia, idx) {
-      this.list2[ia].idx = idx
+    handleC2 (idx) {
+      this.handleList2(idx)
     },
-    handleC3 (ia, ib, idx) {
-      this.list3[ia][ib].idx = idx
+    handleC3 (idx) {
+      this.handleList3(idx)
     }
   },
   vuex: {
-    actions,
+    actions: {
+      ...Object.assign({}, actions, actions2)
+    },
     getters: {
       full (state) {
         return state.bars.full_show
+      },
+      list1 (_) {
+        return _.menu.list1
+      },
+      list2 (_) {
+        return _.menu.list2
+      },
+      list3 (_) {
+        return _.menu.list3
       }
     }
   }

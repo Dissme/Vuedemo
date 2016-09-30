@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 // 导入各个模块的初始状态和 mutations
 import login from 'modules/login'
 import bars from 'modules/bars'
+import menu from 'modules/menu'
 
 Vue.use(Vuex)
 Vue.config.debug = true
@@ -14,7 +15,8 @@ export default new Vuex.Store({
   // 组合各个模块
   modules: {
     login,
-    bars
+    bars,
+    menu
   },
   strict: debug
 })

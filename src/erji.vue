@@ -22,6 +22,7 @@
 </style>
 <script>
 import Comp from 'components/erjizujian'
+import actions from 'actions/erji'
 export default{
   data () {
     return {
@@ -42,6 +43,9 @@ export default{
   },
   components: {
     Comp
+  },
+  vuex: {
+    actions
   }
 }
 </script>
