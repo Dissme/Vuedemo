@@ -1,6 +1,6 @@
 <template lang="jade">
   .sanji
-    .h5(:class='[comp_name, type]')
+    .h5(:class='[comp_name, type()]')
       component(:is='comp_name', keep-alive)
     .idx {{idx}}/{{all}}
     .pages
@@ -82,10 +82,14 @@ import sanjijiabin from 'components/sanjijiabin'
 export default {
   data () {
     return {
-      type: this.$route.params.type,
       comp_name: 'sanjishouye',
       idx: 1,
       all: 1
+    }
+  },
+  methods: {
+    type () {
+      return this.$route.params.type
     }
   },
   components: {

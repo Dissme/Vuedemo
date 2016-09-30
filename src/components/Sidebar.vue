@@ -2,22 +2,17 @@
     div(v-bind:class='["side_bar", full && "full"]')
       button.toggle(v-on:click='toggle')
       ul.top
-        li.list_1.on
-          button 会议
-          .list_2
-            button type1
-            button type2
-            button.on 自定义模板
-            .list_3
-              button typeA
-              button.on typeB
-              button typeC
-        li.list_1
-          button 联合办公
-        li.list_1
-          button 购物中心
-        li.list_1
-          button 我的案例
+        template(v-for='(ia,la) in list1.sibs')
+          li(:class="['list_1',ia == list1.idx ? 'on' : '']")
+            button(v-on:click='handleC1(ia)') {{la}}
+            template(v-if='ia == list1.idx')
+              .list_2
+                template(v-for='(ib,lb) in list2[ia].sibs')
+                  button(:class="ib == list2[ia].idx ? 'on' : ''", v-on:click='handleC2(ia,ib)') {{lb}}
+                  template(v-if='ib == list2[ia].idx')
+                    .list_3
+                      template(v-for='(ic,lc) in list3[ia][ib].sibs')
+                        a(:class="ic == list3[ia][ib].idx ? 'on' : ''", v-on:click='handleC3(ia,ib,ic)', v-link='"/sanji/"+lc') {{lc}}
       .white
       nav.bottom
         a(v-link='') 个人中心
@@ -44,28 +39,31 @@
     .top{
       flex: 0 0 auto;
       font-size: 16px;
-      button{
+      button,a{
+        display: block;
         font-size: 16px;
-        padding-left: 66px;
+        padding-left: 70px;
         width: 100%;
         text-align: left;
         box-sizing: border-box;
         height: 60px;
+        line-height: 60px;
         color: #2f2f2f;
         white-space: nowrap;
       }
       .list_1.on{
+        position: relative;
         background: #2f2f2f;
-        button{
+        button,a{
           color: #e2e2e2;
         }
       }
-      .list_2{
-        button.on,button:hover{
+      .list_2 button,.list_2 a{
+        &.on,&:hover{
           background: #393939;
         }
       }
-      .list_3 button{
+      .list_3 a{
         padding-left: 80px;
       }
     }
@@ -80,7 +78,7 @@
         height: 60px;
         line-height: 60px;
         box-sizing: border-box;
-        padding-left: 66px;
+        padding-left: 70px;
         white-space: nowrap;
       }
     }
@@ -94,9 +92,36 @@
 import actions from 'actions/bars'
 
 export default{
+  data () {
+    return {
+      list1: {idx: null, sibs: ['会议', '联合办公', '购物中心', '我的案例']},
+      list2: [
+        {idx: null, sibs: ['type1', 'type2', '自定义模板']},
+        {idx: null, sibs: null},
+        {idx: null, sibs: null},
+        {idx: null, sibs: null}
+      ],
+      list3: [
+        [
+          {idx: null, sibs: null},
+          {idx: null, sibs: null},
+          {idx: null, sibs: ['typeA', 'typeB', 'typeC']}
+        ], [], [], []
+      ]
+    }
+  },
   methods: {
     toggle () {
       this.toggleFullBar()
+    },
+    handleC1 (idx) {
+      this.list1.idx = idx
+    },
+    handleC2 (ia, idx) {
+      this.list2[ia].idx = idx
+    },
+    handleC3 (ia, ib, idx) {
+      this.list3[ia][ib].idx = idx
     }
   },
   vuex: {

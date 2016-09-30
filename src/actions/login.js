@@ -5,7 +5,8 @@ export const types = {
   USER_LOGOUT: 'USER_LOGOUT',
   HIDE_BARS: 'HIDE_BARS',
   SHOW_BARS: 'SHOW_BARS',
-  USER_SIGN_UP: 'USER_SIGN_UP'
+  USER_SIGN_UP: 'USER_SIGN_UP',
+  SEND_EMAIL: 'SEND_EMAIL'
 }
 
 export default {
@@ -16,9 +17,11 @@ export default {
       data: {
         account, password
       }
-    }, dispatch, types.USER_LOGIN).then(() => {
-      if (red) red()
-      else this.$route.router.go({name: 'erji'})
+    }, dispatch, types.USER_LOGIN).then((res) => {
+      if (res) {
+        if (red) red()
+        else this.$route.router.go({name: 'erji'})
+      }
     })
   },
   userLogout ({dispatch}) {
@@ -31,8 +34,8 @@ export default {
       data: {
         username, password, email
       }
-    }, dispatch, types.USER_SIGN_UP).then(() => {
-      this.userLogin({dispatch}, username, password)
+    }, dispatch, types.USER_SIGN_UP).then((res) => {
+      if (res) this.userLogin(username, password)
     })
   },
   hideBars ({dispatch}) {
@@ -41,10 +44,20 @@ export default {
   showBars ({dispatch}) {
     dispatch(types.SHOW_BARS)
   },
-  test2 ({dispatch}) {
+  sendEmail ({dispatch}, email) {
     fetch({
-      method: 'get',
-      url: 'test2'
-    }, dispatch, 'null').then((res) => console.log(res))
+      method: 'post',
+      url: 'find_pwd',
+      data: {email}
+    }, dispatch, types.SEND_EMAIL).then((res) => console.log(res))
+  },
+  resetPwd ({dispatch}, password, code) {
+    fetch({
+      method: 'post',
+      url: 'reset',
+      data: {password, code}
+    }, dispatch, null).then((res) => {
+      if (res) window.location.replace('/')
+    })
   }
 }

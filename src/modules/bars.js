@@ -15,6 +15,7 @@ const mutations = {
   [types.GLOBAL_FETCHING] (_, add) {
     let result = _.fetching + add
     _.fetching = result < 0 ? 0 : result
+    !add && window.alert('请求错误')
   },
   [types2.HIDE_BARS] (_) {
     _.bars_show = false

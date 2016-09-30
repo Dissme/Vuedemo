@@ -26,7 +26,7 @@ export function getToken () {
 
 export default function ({method, url, data}, dispatch, successAction) {
   if (!/^http/.test(url)) {
-    url = 'http://e6e73eb2.ngrok.io/api/'.concat(url)
+    url = 'http://a97afd49.ngrok.io/api/'.concat(url)
   }
   if (method === 'get' && data) {
     Object.keys(data).forEach((name, idx) => {
@@ -37,14 +37,14 @@ export default function ({method, url, data}, dispatch, successAction) {
   let headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + session.getItem('token')// todo: 回头商量下请求机制
+    'Authorization': 'Bearer ' + session.getItem('token')
   }
   dispatch(types.GLOBAL_FETCHING, 1)
   return Fetch(url, {method, headers, body: JSON.stringify(data)}).then(checkStatus).then(parseJSON).then(res => {
     dispatch(types.GLOBAL_FETCHING, -1)
     if (res.success) {
-      dispatch(successAction, res.data)
-      return res.data
+      successAction && dispatch(successAction, res.data)
+      return res.data || true
     } else {
       console.error(res.msg)
     }

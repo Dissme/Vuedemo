@@ -15,6 +15,10 @@ export default (router) => router.map({
     name: 'login',
     component: Login
   },
+  '/reset': {
+    name: 'reset',
+    component: Login
+  },
   '/erji': {
     name: 'erji',
     component: Erji,

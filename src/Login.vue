@@ -9,7 +9,6 @@
             br
             |并且为您实时保存案例。
         button.sign(v-on:click='signIn') {{sign_in ? '注册' : '登陆'}}
-        button(v-on:click='test') test
       .login_form
         .type {{form_temp}}
         .form
@@ -37,14 +36,22 @@
               input(v-on:blur='blur', name='user_idf', v-model='user_idf')
               img(v-on:click='changeCode', :src='code.dataURL', class='code', :data-code='code.code')
           template(v-if='form_temp=="FORGET PASSWORD"')
-            .des 我们将发送一封重置密码的链接到您的邮箱
-            .input(v-on:click='input("user_email",$event)')
+            .des {{hasSend?'邮件发送成功':'我们将发送一封重置密码的链接到您的邮箱'}}
+            a.go(:href='"http://"+user_email.split("@")[1]', v-if='hasSend') 立刻前往邮箱>
+            .input(v-on:click='input("user_email",$event)', v-if='!hasSend')
               label 邮箱
               input(v-on:blur='blur', name='user_email', v-model='user_email')
+          template(v-if='form_temp=="RESET PASSWORD"')
+            .input(v-on:click='input("user_pwd",$event)')
+              label 新密码
+              input(v-on:blur='blur', name='user_pwd', v-model='user_pwd')
+            .input(v-on:click='input("user_pwd2",$event)')
+              label 确认密码
+              input(v-on:blur='blur', name='user_pwd2', v-model='user_pwd2')
         .buttons
-          template(v-if='form_temp == "FORGET PASSWORD"')
+          template(v-if='form_temp == "FORGET PASSWORD" ||form_temp == "RESET PASSWORD"')
             button(v-on:click='reset') 重置密码
-            span.back(v-on:click='back') 想起来了
+            span.back(v-on:click='back', v-if='form_temp == "FORGET PASSWORD"') 想起来了
           template(v-else)
             button(v-on:click='login') {{sign_in ? '登陆' : '注册'}}
             span 或者
@@ -269,7 +276,7 @@ const validator = {
     return str.replace(/(^\s*)|(\s*$)/g, '')
   },
   createCode () {
-    let code = {code: '1234', dataURL: ''}
+    let code = {code: '1234', dataURL: '123'}
     return code
   },
   user_name (str) {
@@ -284,6 +291,9 @@ const validator = {
     if (typeof str !== 'string') return ''
     return (/^[@A-Za-z0-9!#\$%\^&\*\.~]{6,22}$/).test(str)
   },
+  user_pwd2 (str1, str2) {
+    return str1 === str2
+  },
   user_idf (str, code) {
     return str.trim().toUpperCase() === code.trim()
   }
@@ -294,13 +304,15 @@ export default{
     return {
       user_name: '',
       user_pwd: '',
+      user_pwd2: '',
       user_email: '',
       user_idf: '',
       sign_in: true,
       form_temp: 'LOGIN',
       input_name: '',
       show_modal: false,
-      code: validator.createCode()
+      code: validator.createCode(),
+      reset_code: ''
     }
   },
   components: {
@@ -311,6 +323,9 @@ export default{
     getters: {
       logined (state) {
         return state.login.logined
+      },
+      hasSend (_) {
+        return _.login.hasSend
       }
     }
   },
@@ -322,16 +337,19 @@ export default{
     this.showBars()
   },
   methods: {
-    test () {
-      this.test2()
-    },
     changeCode () {
       this.code = validator.createCode()
     },
     checkAuth () {
       let red = this.$route.query.redirect || '/erji'
+      let {code} = this.$route.query
       if (this.logined) {
         this.$route.router.go(decodeURIComponent(red))
+      }
+      if (code) {
+        this.form_temp = 'RESET PASSWORD'
+        this.reset_code = code
+        this.show_modal = true
       }
     },
     login () {
@@ -348,6 +366,10 @@ export default{
     forget () {
       this.form_temp = 'FORGET PASSWORD'
     },
+    reset () {
+      if (this.form_temp === 'FORGET PASSWORD') this.sendEmail(this.user_email)
+      else this.resetPwd(this.user_pwd, this.reset_code)
+    },
     back () {
       this.form_temp = 'LOGIN'
     },
@@ -360,7 +382,8 @@ export default{
       let cls = 'input'
       let val = currentTarget.value
       let name = currentTarget.name
-      if (!validator[name](val, this.code.code)) cls += ' err'
+      let param2 = this.form_temp === 'LOGIN' ? this.code.code : this.user_pwd
+      if (!validator[name](val, param2)) cls += ' err'
       if (val.length) cls += ' hasVal'
       currentTarget.parentNode.className = cls
     },

@@ -10,6 +10,7 @@ const session = window.localStorage || window.sessionStorage
 router.beforeEach((transition) => {
   document.body.scrollTop = 0
   let token = session.getItem('token') // todo:暂无
+  token = true
   if (token) {
     //  todo: 验证token
   }
