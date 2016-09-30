@@ -111,6 +111,12 @@ export default{
     actions: {
       ...Object.assign({}, actions, actions2)
     },
+    method: {
+      route () {
+        let reg = /\?[\S]+/
+        return this.$route.path.replace(reg, '').split('/')
+      }
+    },
     getters: {
       full (state) {
         return state.bars.full_show
