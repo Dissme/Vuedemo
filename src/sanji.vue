@@ -1,10 +1,10 @@
 <template lang="jade">
   .sanji
-    .h5(:class='[comp_name, type()]')
-      component(:is='comp_name', keep-alive)
+    .h5(:class='[comp_name[idx], type()]')
+      component(:is='comp_name[idx]', keep-alive, transition="page", transition-mode="out-in")
     .idx {{idx}}/{{all}}
     .pages
-      .scroll
+      .scroll(@mousedown='mouse',@mouseup='mouse',@mousewheel='mouse',@mousemove='mouse',@mouseover='mouse',:style='{top: (idx-1) * 70 +"px"}')
         .block
         span {{idx}}/{{all}}
 </template>
@@ -60,6 +60,10 @@
         flex-direction: column;
         z-index: 2;
         width: 100%;
+        transition: all .3s ease;
+        &.mdown{
+          transform: scale(.8,.8);
+        }
         .block{
           background: #2f2f2f;
           flex: 1 1 auto;
@@ -79,24 +83,64 @@
 import sanjishouye from 'components/sanjishouye'
 import sanjijiabin from 'components/sanjijiabin'
 
+let mouseEvents = {
+  mousedown (e, t) {
+    if (!/mdown/.test(e.currentTarget.className)) {
+      e.currentTarget.className += ' mdown'
+      t.mouseY = e.y
+    }
+  },
+  mousemove (e, t) {
+    if (/mdown/.test(e.currentTarget.className)) {
+      t.mouseY_end = e.y
+      let len = t.mouseY_end - t.mouseY
+      return ~~(e.currentTarget.offsetHeight / t.all / len)
+    }
+  },
+  mouseup (e) {
+    if (/mdown/.test(e.currentTarget.className)) {
+      e.currentTarget.className = e.currentTarget.className.replace('mdown', '')
+    }
+  },
+  mousewheel (e) {
+    if (/mdown/.test(e.currentTarget.className)) {
+      e.currentTarget.className = e.currentTarget.className.replace('mdown', '')
+    }
+    return e.wheelDelta > 0 ? -1 : 1
+  },
+  mouseover (e) {
+    if (/mdown/.test(e.currentTarget.className)) {
+      e.currentTarget.className = e.currentTarget.className.replace('mdown', '')
+    }
+  }
+}
 export default {
   data () {
     return {
-      comp_name: 'sanjishouye',
+      comp_name: ['', 'sanjishouye', 'sanjijiabin'],
       idx: 1,
-      all: 1
+      all: 2,
+      mouseY: 0,
+      mouseY_end: 0
     }
   },
   methods: {
     type () {
       return this.$route.params.type
+    },
+    mouse (e) {
+      let sc = mouseEvents[e.type](e, this)
+      if (sc) this.scroll(sc)
+    },
+    scroll (x) {
+      let re = this.idx + x
+      if (re >= this.all) re = this.all
+      if (re <= 0) re = 1
+      this.idx = re
     }
   },
   components: {
     sanjishouye, sanjijiabin
-  },
-  created () {
-    // todo 根据type fetch三级页面
   }
 }
 </script>
