@@ -73,13 +73,13 @@
       top: 460px;
       left: 0;
       right: 0;
-      border: 1px solid #f2f2f2;
+      border: 1px solid #e9e9e9;
       padding-right: 45px;
       &:before{
         position: absolute;
         right: 0;
         top: 0;
-        background: #f2f2f2;
+        background: #e9e9e9;
         width: 45px;
         height: 100%;
         content: '';

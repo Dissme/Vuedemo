@@ -143,13 +143,4 @@ export default {
   .modal-enter, .modal-leave {
     transform: scale(.5);
   }
-  .page-transition {
-    transition: all .5s ease-out;
-  }
-  .page-enter {
-    opacity: .9;
-  }
-  .page-leave {
-    transform: translateY(-80%);
-  }
 </style>

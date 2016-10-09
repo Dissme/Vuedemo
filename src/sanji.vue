@@ -82,6 +82,7 @@
 <script>
 import sanjishouye from 'components/sanjishouye'
 import sanjijiabin from 'components/sanjijiabin'
+import $ from 'jquery'
 
 let mouseEvents = {
   mousedown (e, t) {
@@ -92,8 +93,8 @@ let mouseEvents = {
   },
   mousemove (e, t) {
     if (/mdown/.test(e.currentTarget.className)) {
-      t.mouseY_end = e.y
-      let len = t.mouseY_end - t.mouseY
+      t.mouseY2 = e.y
+      let len = t.mouseY2 - t.mouseY
       return ~~(e.currentTarget.offsetHeight / t.all / len)
     }
   },
@@ -102,11 +103,14 @@ let mouseEvents = {
       e.currentTarget.className = e.currentTarget.className.replace('mdown', '')
     }
   },
-  mousewheel (e) {
+  mousewheel (e, t) {
     if (/mdown/.test(e.currentTarget.className)) {
       e.currentTarget.className = e.currentTarget.className.replace('mdown', '')
     }
-    return e.wheelDelta > 0 ? -1 : 1
+    let re = e.wheelDelta > 0 ? -1 : 1
+    t.mouseY = 0
+    t.mouseY2 = re
+    return re
   },
   mouseover (e) {
     if (/mdown/.test(e.currentTarget.className)) {
@@ -121,7 +125,7 @@ export default {
       idx: 1,
       all: 2,
       mouseY: 0,
-      mouseY_end: 0
+      mouseY2: 0
     }
   },
   methods: {
@@ -141,6 +145,25 @@ export default {
   },
   components: {
     sanjishouye, sanjijiabin
+  },
+  transitions: {
+    page: {
+      css: false,
+      enter (el, done) {
+        let {mouseY, mouseY2} = this
+        $(el).css({top: mouseY - mouseY2 > 0 ? '-100%' : '100%'}).animate({top: 0}, 700, done)
+      },
+      enterCancelled (el) {
+        $(el).stop()
+      },
+      leave (el, done) {
+        let {mouseY, mouseY2} = this
+        $(el).css({top: 0}).animate({top: mouseY - mouseY2 < 0 ? '-100%' : '100%'}, 700, done)
+      },
+      leaveCancelled (el) {
+        $(el).stop()
+      }
+    }
   }
 }
 </script>
