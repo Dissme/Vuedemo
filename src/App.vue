@@ -140,10 +140,4 @@ export default {
   .modal-enter, .modal-leave {
     transform: scale(.5);
   }
-  /* common style*/
-  .w {
-    width: 1156px;
-    margin: 0 auto;
-    position: relative;
-  }
 </style>
