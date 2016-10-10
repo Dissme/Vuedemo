@@ -13,7 +13,6 @@ import store from './store'
 import Topbar from 'components/Topbar'
 import Sidebar from 'components/Sidebar'
 import Loader from 'components/GloabalFetching'
-
 export default {
   store,
   components: {
@@ -43,7 +42,6 @@ export default {
     padding: 0;
     overflow: hidden;
   }
-
   body{
     font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
     font-size: 16px;
@@ -112,7 +110,7 @@ export default {
       flex: 1 1 auto;
       overflow: hidden;
       overflow-y: auto;
-      background: #F8F8F8;
+      background: #e2e2e2;
     }
   }
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
@@ -122,7 +120,6 @@ export default {
     height: 15px;
     background-color: rgba(0,0,0,.7);
   }
-
   /*定义滚动条轨道 内阴影+圆角*/
   ::-webkit-scrollbar-track
   {
@@ -130,7 +127,6 @@ export default {
     border-radius: 5px;
     background-color: #F5F5F5;
   }
-
   /*定义滑块 内阴影+圆角*/
   ::-webkit-scrollbar-thumb
   {
