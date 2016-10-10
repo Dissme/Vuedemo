@@ -50,6 +50,7 @@
         line-height: 60px;
         color: #2f2f2f;
         white-space: nowrap;
+        font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
       }
       .list_1.on{
         position: relative;

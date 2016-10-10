@@ -23,8 +23,8 @@
       position: absolute;
       top: 50px;
       left: 10px;
-      width: 110px;
-      height: 110px;
+      width: 100px;
+      height: 100px;
       background: #333;
       color: #fff;
       opacity: .7;
@@ -34,20 +34,29 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
+      line-height: 20px;
+      letter-spacing: 3px;
+      span {
+        font-size: 16px;
+      }
     }
     .h1,.h2{
+      font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
       color: #fff;
       position: absolute;
     }
     .h1{
-      top: 200px;
+      top: 179px;
       left: 0;
       width: 100%;
+      font-size: 30px;
+      line-height: 40px;
     }
     .h2{
-      top: 234px;
+      top: 227px;
       left: 0;
       width: 100%;
+      font-size: 22px;
     }
     .huodong{
       width: 300px;
@@ -57,11 +66,16 @@
       left: 0;
       right: 0;
       margin: auto;
-      background: rgba(255,255,255,.7);
+      background: rgba(125, 125, 125, 0.7);
+      padding-left: 20px;
       color: #fff;
       overflow-y: auto;
+      .time{
+        font-size: 14px;
+      }
       input{
         width: 100%;
+        font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
         color: #fff;
       }
     }
@@ -119,18 +133,18 @@
   export default{
     data () {
       return {
-        h1: '点击输入主标题',
-        h2: '点击输入副标题',
+        h1: '点击添加主标题',
+        h2: '点击添加副标题',
         huodong: [{
           time: '9:00-10:00',
-          status: '进行中',
-          topic: '活动',
-          author: '主办方'
+          status: '正在进行',
+          topic: '单击编辑正在进行活动',
+          author: '单击编辑活动主办方'
         }, {
           time: '10:00-11:00',
-          status: '进行中',
-          topic: '活动',
-          author: '主办方'
+          status: '即将开始',
+          topic: '单击编辑正在进行活动',
+          author: '单击编辑活动主办方'
         }]
       }
     },
