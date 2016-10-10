@@ -144,8 +144,6 @@ export default {
   .modal-enter, .modal-leave {
     transform: scale(.5);
   }
-<<<<<<< HEAD
-
 
   /* common style*/
   .w {
@@ -154,7 +152,6 @@ export default {
     position: relative;
   }
 
-=======
   .page-transition {
     transition: all .5s ease-out;
   }
@@ -164,5 +161,4 @@ export default {
   .page-leave {
     transform: translateY(-80%);
   }
->>>>>>> 13c7d033a2809db1c07da25c9b44bcdc3d98d35c
 </style>
