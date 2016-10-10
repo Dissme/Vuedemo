@@ -16,12 +16,12 @@
 <style lang="less" scoped>
   .typeA .shouye{
     height: 100%;
-    overflow-y: auto;
     background: url("http://scimg.jb51.net/allimg/160815/103-160Q509544OC.jpg") no-repeat 0 0;
     background-size: 100% 100%;
+    position: relative;
     .biaozhi{
       position: absolute;
-      top: 50px;
+      top: 10px;
       left: 10px;
       width: 100px;
       height: 100px;
@@ -46,14 +46,14 @@
       position: absolute;
     }
     .h1{
-      top: 179px;
+      top: 160px;
       left: 0;
       width: 100%;
       font-size: 30px;
       line-height: 40px;
     }
     .h2{
-      top: 227px;
+      top: 200px;
       left: 0;
       width: 100%;
       font-size: 22px;
@@ -62,7 +62,7 @@
       width: 300px;
       height: 140px;
       position: absolute;
-      top: 284px;
+      top: 244px;
       left: 0;
       right: 0;
       margin: auto;
@@ -84,7 +84,7 @@
       height: 45px;
       margin: 0 auto;
       position: absolute;
-      top: 500px;
+      top: 460px;
       left: 0;
       right: 0;
       border: 1px solid #f2f2f2;
@@ -104,7 +104,7 @@
       width: 340px;
       margin: 0 auto;
       position: absolute;
-      top: 570px;
+      top: 530px;
       left: 0;
       right: 0;
       border: 1px solid #f2f2f2;
