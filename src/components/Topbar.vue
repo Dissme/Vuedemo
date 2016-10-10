@@ -1,6 +1,6 @@
 <template lang="jade">
   .top_bar
-    div(v-bind:class = '[".logo", full ? "full" : ""]')
+    div(v-bind:class = '["logo", full ? "full" : ""]')
     .buttons
       slot
         button 保存
@@ -18,9 +18,12 @@
     position: relative;
     .logo{
       width: 33px;
-      height: 37px;
-      .full{
-        width: 178px;
+      height: 36px;
+      margin-top: (70-36)/2px;
+      margin-left: 20px;
+      background: url(../assets/img/logo-white.png);
+      &.full{
+        width: 172px;
       }
     }
     .buttons{
@@ -31,10 +34,13 @@
       line-height: 70px;
       height: 70px;
       >button{
+        font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
         flex: 0 0 auto;
         width: 140px;
         font-size: 16px;
         color: #fff;
+        letter-spacing: 3px;
+        color: #E2E2E2;
       }
       .publish{
         background: #3c6;

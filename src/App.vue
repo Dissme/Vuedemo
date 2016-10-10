@@ -43,6 +43,7 @@ export default {
     padding: 0;
     overflow: hidden;
   }
+
   body{
     font-family:"Microsoft YaHei",Arial,Helvetica,sans-serif,"宋体";
     font-size: 16px;
@@ -111,7 +112,7 @@ export default {
       flex: 1 1 auto;
       overflow: hidden;
       overflow-y: auto;
-      background: #e2e2e2;
+      background: #F8F8F8;
     }
   }
   /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
@@ -142,5 +143,21 @@ export default {
   }
   .modal-enter, .modal-leave {
     transform: scale(.5);
+  }
+  .page-transition {
+    transition: all .5s ease-out;
+  }
+  .page-enter {
+    opacity: .9;
+  }
+  .page-leave {
+    transform: translateY(-80%);
+  }
+
+  /* common style*/
+  .w {
+    width: 1156px;
+    margin: 0 auto;
+    position: relative;
   }
 </style>
